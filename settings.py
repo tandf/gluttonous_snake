@@ -1,6 +1,3 @@
-import pygame
-
-
 class Settings:
     def __init__(self):
         # 屏幕属性
@@ -10,3 +7,6 @@ class Settings:
 
         # 时间参数
         self.interval = 0.1
+
+        # 初始长度
+        self.primary_length = 3
