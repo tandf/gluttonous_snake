@@ -18,6 +18,9 @@ class Food(Sprite):
         # 初始化位置
         self.rect.topleft = (0, 0)
 
+        # 获取分值
+        self.points = settings.normal_points
+
     def random_pos(self, snake_head, snake_parts, foods):
         while True:
             self.rect.left = randint(0, self.settings.x - 1) * self.settings.len

@@ -4,6 +4,8 @@ class Stats:
         self.pause_game = False
         self.game_active = True
         self.bonus = False
+        self.moved = False
 
         self.snake_length = settings.primary_length
-        self.moved = False
+        self.foods_eaten = 0
+        self.score = 0.0

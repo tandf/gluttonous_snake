@@ -7,18 +7,20 @@ from snake import SnakePart
 from food import Food
 
 
-def update_screen(settings, stats, screen, snake_head, snake_parts, foods):
+def draw_screen(settings, stats, screen, scoreboard, snake_head, snake_parts, foods):
     screen.fill(settings.bg_color)
 
     snake_parts.draw(screen)
     snake_head.blitme()
     foods.draw(screen)
-
-    if stats.bonus:
-        time.sleep(0.5)
-        stats.bonus = False
+    scoreboard.show_score(stats)
 
     pygame.display.flip()
+
+    if stats.bonus:
+        time.sleep(1)
+        bonus(settings, screen, stats, snake_head, snake_parts, foods)
+        stats.bonus = False
 
 
 def update_snake(settings, screen, stats, snake_head, snake_parts):
@@ -40,20 +42,8 @@ def update_food(settings, stats, screen, snake_head, snake_parts, foods):
         food.random_pos(snake_head, snake_parts, foods)
         foods.add(food)
 
-        # 如果三个食物样式相同，暂停2秒，大量增加食物，并将蛇长度缩短
         if check_bonus(settings, food, foods):
             stats.bonus = True
-
-            # 增加食物
-            while len(foods) < settings.bonus_food:
-                food = Food(screen, settings)
-                food.random_pos(snake_head, snake_parts, foods)
-                foods.add(food)
-
-            # 将蛇长度缩短
-            for part in snake_parts.copy():
-                if not part.check_alive(stats.snake_length - settings.bonus_cut_length):
-                    snake_parts.remove(part)
 
 
 def check_event(settings, screen, stats, snake_head):
@@ -100,7 +90,11 @@ def check_collision(settings, stats, snake_head, snake_parts, foods):
     food = pygame.sprite.spritecollideany(snake_head, foods)
     if food:
         stats.snake_length += 1
+        stats.foods_eaten += 1
+        stats.score += food.points * settings.level
         foods.remove(food)
+
+        settings.update_level(stats)
 
 
 def check_bonus(settings, food, foods):
@@ -110,3 +104,19 @@ def check_bonus(settings, food, foods):
             if food.style != food_style1:
                 return False
         return True
+
+
+def bonus(settings, screen, stats, snake_head, snake_parts, foods):
+    # 加分
+    stats.score += settings.bonus_points * settings.level
+
+    # 增加食物
+    while len(foods) < settings.bonus_food:
+        food = Food(screen, settings)
+        food.random_pos(snake_head, snake_parts, foods)
+        foods.add(food)
+
+    # 将蛇长度缩短
+    for part in snake_parts.copy():
+        if not part.check_alive(stats.snake_length - settings.bonus_cut_length):
+            snake_parts.remove(part)

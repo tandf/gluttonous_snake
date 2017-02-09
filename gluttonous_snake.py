@@ -5,6 +5,7 @@ from pygame.sprite import Group
 
 from settings import Settings
 from stats import Stats
+from scoreboard import ScoreBoard
 import game_function as gf
 from snake import SnakeHead
 from food import Food
@@ -19,6 +20,7 @@ def run_game():
 
     # 存储游戏信息的实例
     stats = Stats(settings)
+    scoreboard = ScoreBoard(settings, screen, stats)
 
     snake_head = SnakeHead(settings, screen)
     snake_parts = Group()
@@ -39,6 +41,6 @@ def run_game():
             last_time = time.time()
             stats.moved = False
 
-        gf.update_screen(settings, stats, screen, snake_head, snake_parts, foods)
+        gf.draw_screen(settings, stats, screen, scoreboard, snake_head, snake_parts, foods)
 
 run_game()
