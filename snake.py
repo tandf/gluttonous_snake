@@ -45,7 +45,7 @@ class SnakeHead:
 
 
 class SnakePart(Sprite):
-    def __init__(self, head_topleft, screen):
+    def __init__(self, snake_head, screen):
         super(SnakePart, self).__init__()
         self.screen = screen
 
@@ -53,8 +53,18 @@ class SnakePart(Sprite):
         self.image = pygame.image.load('images/body.bmp')
         self.rect = self.image.get_rect()
 
+        # 加载尾部图像
+        if snake_head.facing == "up":
+            self.tail_image = pygame.image.load('images/tail_up.bmp')
+        elif snake_head.facing == "down":
+            self.tail_image = pygame.image.load('images/tail_down.bmp')
+        elif snake_head.facing == "left":
+            self.tail_image = pygame.image.load('images/tail_left.bmp')
+        elif snake_head.facing == "right":
+            self.tail_image = pygame.image.load('images/tail_right.bmp')
+
         # 身体的位置即为头的位置
-        self.rect.topleft = head_topleft
+        self.rect.topleft = snake_head.rect.topleft
 
         # 寿命
         self.life = 1
@@ -64,4 +74,6 @@ class SnakePart(Sprite):
             return False
         else:
             self.life += 1
+            if self.life == snake_length:
+                self.image = self.tail_image
             return True

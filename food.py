@@ -11,7 +11,7 @@ class Food(Sprite):
         self.settings = settings
 
         # 获取图像
-        self.image = pygame.image.load('images/food.bmp')
+        self.image = pygame.image.load('images/food' + str(randint(1, 7)) + '.bmp')
         self.rect = self.image.get_rect()
 
         # 初始化位置

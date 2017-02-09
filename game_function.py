@@ -9,8 +9,8 @@ from food import Food
 def update_screen(settings, screen, snake_head, snake_parts, foods):
     screen.fill(settings.bg_color)
 
-    snake_head.blitme()
     snake_parts.draw(screen)
+    snake_head.blitme()
     foods.draw(screen)
 
     pygame.display.flip()
@@ -23,7 +23,7 @@ def update_snake(settings, screen, stats, snake_head, snake_parts):
             snake_parts.remove(part)
 
     # 产生新的身体部分
-    snake_part = SnakePart(snake_head.rect.topleft, screen)
+    snake_part = SnakePart(snake_head, screen)
     snake_parts.add(snake_part)
 
     snake_head.update()
