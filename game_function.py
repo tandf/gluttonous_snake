@@ -1,4 +1,5 @@
 import sys
+import time
 
 import pygame
 
@@ -6,12 +7,16 @@ from snake import SnakePart
 from food import Food
 
 
-def update_screen(settings, screen, snake_head, snake_parts, foods):
+def update_screen(settings, stats, screen, snake_head, snake_parts, foods):
     screen.fill(settings.bg_color)
 
     snake_parts.draw(screen)
     snake_head.blitme()
     foods.draw(screen)
+
+    if stats.bonus:
+        time.sleep(3)
+        stats.bonus = False
 
     pygame.display.flip()
 
@@ -29,11 +34,27 @@ def update_snake(settings, screen, stats, snake_head, snake_parts):
     snake_head.update()
 
 
-def update_food(settings, screen, snake_head, snake_parts, foods):
+def update_food(settings, stats, screen, snake_head, snake_parts, foods):
     while len(foods) < settings.food_limit:
         food = Food(screen, settings)
-        food.random_pos(snake_head, snake_parts)
+        food.random_pos(snake_head, snake_parts, foods)
         foods.add(food)
+
+        # 如果三个食物样式相同，暂停2秒，大量增加食物，并将蛇长度缩短
+        if check_bonus(settings, food, foods):
+            time.sleep(1)
+            stats.bonus = True
+
+            # 增加食物
+            while len(foods) < settings.bonus_food:
+                food = Food(screen, settings)
+                food.random_pos(snake_head, snake_parts, foods)
+                foods.add(food)
+
+            # 将蛇长度缩短
+            for part in snake_parts.copy():
+                if not part.check_alive(stats.snake_length - settings.bonus_cut_length):
+                    snake_parts.remove(part)
 
 
 def check_event(settings, screen, stats, snake_head):
@@ -81,3 +102,12 @@ def check_collision(settings, stats, snake_head, snake_parts, foods):
     if food:
         stats.snake_length += 1
         foods.remove(food)
+
+
+def check_bonus(settings, food, foods):
+    if len(foods) == settings.food_limit:
+        food_style1 = food.style
+        for food in foods:
+            if food.style != food_style1:
+                return False
+        return True

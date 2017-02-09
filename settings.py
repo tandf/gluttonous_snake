@@ -1,7 +1,7 @@
 class Settings:
     def __init__(self):
         # 屏幕属性
-        self.bit = (600, 600)
+        self.bit = (450, 450)
         self.len = 15
         self.bg_color = (0, 0, 0)
         self.x = self.bit[0] / self.len
@@ -12,6 +12,8 @@ class Settings:
 
         # 初始长度
         self.primary_length = 3
+        self.bonus_cut_length = 30
 
-        # 最多食物量
+        # 食物量
         self.food_limit = 3
+        self.bonus_food = 30
