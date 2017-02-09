@@ -7,6 +7,7 @@ from settings import Settings
 from stats import Stats
 import game_function as gf
 from snake import SnakeHead
+from food import Food
 
 
 def run_game():
@@ -21,6 +22,7 @@ def run_game():
 
     snake_head = SnakeHead(settings, screen)
     snake_parts = Group()
+    foods = Group()
 
     last_time = time.time()
 
@@ -29,11 +31,14 @@ def run_game():
 
         gf.check_event(settings, screen, stats, snake_head)
 
-        if time.time() - last_time >= settings.interval and not stats.pause_game:
+        if time.time() - last_time >= settings.interval and not stats.pause_game and stats.game_active:
             gf.update_snake(settings, screen, stats, snake_head, snake_parts)
+            gf.check_collision(settings, stats, snake_head, snake_parts, foods)
+            gf.update_food(settings, screen, snake_head, snake_parts, foods)
+
             last_time = time.time()
             stats.moved = False
 
-        gf.update_screen(settings, screen, snake_head, snake_parts)
+        gf.update_screen(settings, screen, snake_head, snake_parts, foods)
 
 run_game()

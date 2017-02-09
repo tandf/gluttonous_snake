@@ -3,13 +3,16 @@ import sys
 import pygame
 
 from snake import SnakePart
+from food import Food
 
 
-def update_screen(settings, screen, snake_head, snake_parts):
+def update_screen(settings, screen, snake_head, snake_parts, foods):
     screen.fill(settings.bg_color)
 
     snake_head.blitme()
     snake_parts.draw(screen)
+    foods.draw(screen)
+
     pygame.display.flip()
 
 
@@ -24,6 +27,13 @@ def update_snake(settings, screen, stats, snake_head, snake_parts):
     snake_parts.add(snake_part)
 
     snake_head.update()
+
+
+def update_food(settings, screen, snake_head, snake_parts, foods):
+    while len(foods) < settings.food_limit:
+        food = Food(screen, settings)
+        food.random_pos(snake_head, snake_parts)
+        foods.add(food)
 
 
 def check_event(settings, screen, stats, snake_head):
@@ -59,3 +69,15 @@ def check_key_down(event, stats, snake_head):
             if snake_head.facing != "left":
                 snake_head.facing = "right"
                 stats.moved = True
+
+
+def check_collision(settings, stats, snake_head, snake_parts, foods):
+    # 检测头部撞到身体
+    if pygame.sprite.spritecollideany(snake_head, snake_parts):
+        stats.game_active = False
+
+    # 检测吃到食物
+    food = pygame.sprite.spritecollideany(snake_head, foods)
+    if food:
+        stats.snake_length += 1
+        foods.remove(food)
