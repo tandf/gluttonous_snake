@@ -15,19 +15,19 @@ class SnakeHead:
         self.image = self.image_up
         self.rect = self.image.get_rect()
 
-        self.rect.topleft = (settings.len * 20, settings.len * 20)
+        self.rect.topleft = (settings.len * 20, settings.len * 20 + settings.scoreboard_height)
         self.facing = "up"
 
     def update(self):
         if self.facing == "up":
             self.rect.y -= self.settings.len
             self.image = self.image_up
-            if self.rect.y < 0:
+            if self.rect.y < self.settings.scoreboard_height:
                 self.rect.y += self.settings.bit[1]
         elif self.facing == "down":
             self.rect.y += self.settings.len
             self.image = self.image_down
-            if self.rect.y >= self.settings.bit[1]:
+            if self.rect.y >= self.settings.bit[1] + self.settings.scoreboard_height:
                 self.rect.y -= self.settings.bit[1]
         elif self.facing == "left":
             self.rect.x -= self.settings.len

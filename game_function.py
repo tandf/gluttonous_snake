@@ -15,7 +15,7 @@ def update_screen(settings, stats, screen, snake_head, snake_parts, foods):
     foods.draw(screen)
 
     if stats.bonus:
-        time.sleep(3)
+        time.sleep(0.5)
         stats.bonus = False
 
     pygame.display.flip()
@@ -42,7 +42,6 @@ def update_food(settings, stats, screen, snake_head, snake_parts, foods):
 
         # 如果三个食物样式相同，暂停2秒，大量增加食物，并将蛇长度缩短
         if check_bonus(settings, food, foods):
-            time.sleep(1)
             stats.bonus = True
 
             # 增加食物

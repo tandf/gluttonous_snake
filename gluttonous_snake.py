@@ -14,7 +14,7 @@ def run_game():
     # 初始化游戏
     pygame.init()
     settings = Settings()
-    screen = pygame.display.set_mode(settings.bit)
+    screen = pygame.display.set_mode((settings.bit[0], settings.bit[1] + settings.scoreboard_height))
     pygame.display.set_caption("Gluttonous Snake")
 
     # 存储游戏信息的实例

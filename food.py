@@ -21,7 +21,7 @@ class Food(Sprite):
     def random_pos(self, snake_head, snake_parts, foods):
         while True:
             self.rect.left = randint(0, self.settings.x - 1) * self.settings.len
-            self.rect.top = randint(0, self.settings.y - 1) * self.settings.len
+            self.rect.top = randint(0, self.settings.y - 1) * self.settings.len + self.settings.scoreboard_height
 
             # 随机位置直到不与蛇、其他食物重叠
             if not pygame.sprite.spritecollideany(self, snake_parts)\
