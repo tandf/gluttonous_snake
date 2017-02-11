@@ -22,10 +22,14 @@ class Settings:
 
         # 分数
         self.normal_points = 10.0
+        self.big_points = 100.0
         self.bonus_points = 500.0
 
         self.level = 1.0
         self.levelup_foods = 10
+
+        # 大食物几率
+        self.big_food_chance = 2
 
     def update_level(self, stats):
         all_foods = stats.foods_eaten

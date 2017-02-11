@@ -1,5 +1,6 @@
 import sys
 import time
+from random import randint
 
 import pygame
 
@@ -13,6 +14,7 @@ def draw_screen(settings, stats, screen, scoreboard, snake_head, snake_parts, fo
     snake_parts.draw(screen)
     snake_head.blitme()
     foods.draw(screen)
+    draw_countdown(foods)
     scoreboard.show_score(stats)
 
     pygame.display.flip()
@@ -21,6 +23,12 @@ def draw_screen(settings, stats, screen, scoreboard, snake_head, snake_parts, fo
         time.sleep(1)
         bonus(settings, screen, stats, snake_head, snake_parts, foods)
         stats.bonus = False
+
+
+def draw_countdown(foods):
+    for food in foods:
+        if food.style == 'big':
+            food.show_countdown()
 
 
 def update_snake(settings, screen, stats, snake_head, snake_parts):
@@ -37,13 +45,28 @@ def update_snake(settings, screen, stats, snake_head, snake_parts):
 
 
 def update_food(settings, stats, screen, snake_head, snake_parts, foods):
+    # 生成食物
     while len(foods) < settings.food_limit:
         food = Food(screen, settings)
         food.random_pos(snake_head, snake_parts, foods)
+
+        # 变大？
+        if len(foods) == settings.food_limit - 1 and not check_big_food(foods):
+            if randint(1, settings.big_food_chance) == 1:
+                food.become_big(snake_head, snake_parts, foods)
         foods.add(food)
 
+        # 产生bonus？
         if check_bonus(settings, food, foods):
             stats.bonus = True
+
+    # 加载大食物的countdown
+    for food in foods:
+        if food.style == 'big':
+            food.update_countdown()
+            if food.existing_time > 9:
+                foods.remove(food)
+            break
 
 
 def check_event(settings, screen, stats, snake_head):
@@ -105,6 +128,12 @@ def check_bonus(settings, food, foods):
                 return False
         return True
 
+
+def check_big_food(foods):
+    for food in foods:
+        if food.style == 'big':
+            return True
+    return False
 
 def bonus(settings, screen, stats, snake_head, snake_parts, foods):
     # 加分
