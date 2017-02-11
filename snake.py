@@ -15,7 +15,11 @@ class SnakeHead:
         self.image = self.image_up
         self.rect = self.image.get_rect()
 
-        self.rect.topleft = (settings.len * 20, settings.len * 20 + settings.scoreboard_height)
+        self.rect.topleft = (self.settings.len * 20, self.settings.len * 20 + self.settings.scoreboard_height)
+        self.facing = "up"
+
+    def initialize(self):
+        self.rect.topleft = (self.settings.len * 20, self.settings.len * 20 + self.settings.scoreboard_height)
         self.facing = "up"
 
     def update(self):
@@ -74,6 +78,4 @@ class SnakePart(Sprite):
             return False
         else:
             self.life += 1
-            if self.life == snake_length:
-                self.image = self.tail_image
             return True

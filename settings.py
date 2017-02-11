@@ -25,18 +25,7 @@ class Settings:
         self.big_points = 100.0
         self.bonus_points = 500.0
 
-        self.level = 1.0
         self.levelup_foods = 10
 
         # 大食物几率
-        self.big_food_chance = 2
-
-    def update_level(self, stats):
-        all_foods = stats.foods_eaten
-        self.level = 1.0
-        while True:
-            all_foods -= self.levelup_foods
-            if all_foods >= 0:
-                self.level += 0.1
-            else:
-                break
+        self.big_food_chance = 10
