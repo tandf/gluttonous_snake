@@ -40,6 +40,7 @@ def run_game():
             gf.check_collision(settings, stats, snake_head, snake_parts, foods)
             gf.update_food(settings, stats, screen, snake_head, snake_parts, foods)
 
+            stats.high_score = max(stats.score, stats.high_score)
             last_time = time.time()
             stats.moved = False
 

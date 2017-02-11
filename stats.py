@@ -12,6 +12,7 @@ class Stats:
         self.snake_length = self.settings.primary_length
         self.foods_eaten = 0
         self.score = 0.
+        self.high_score = 0.
         self.level = 1.0
 
     def initialize(self):

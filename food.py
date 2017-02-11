@@ -63,3 +63,7 @@ class Food(Sprite):
 
     def show_countdown(self):
         self.screen.blit(self.msg_image, self.msg_image_rect)
+
+    def bonus_mode(self):
+        self.image = pygame.image.load('images/food_bonus.bmp')
+        self.style = 'bonus'

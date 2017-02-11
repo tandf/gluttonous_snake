@@ -23,7 +23,7 @@ class Settings:
         # 分数
         self.normal_points = 10.0
         self.big_points = 100.0
-        self.bonus_points = 500.0
+        self.bonus_points = 200.0
 
         self.levelup_foods = 10
 

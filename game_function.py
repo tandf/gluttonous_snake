@@ -19,7 +19,7 @@ def draw_screen(settings, stats, screen, scoreboard, snake_head, snake_parts, fo
         draw_scoreboard(stats, scoreboard)
 
     else:
-        info.show()
+        info.show(stats)
 
     pygame.display.flip()
 
@@ -31,7 +31,9 @@ def draw_screen(settings, stats, screen, scoreboard, snake_head, snake_parts, fo
 
 def draw_scoreboard(stats, scoreboard):
     scoreboard.draw_bg()
+    scoreboard.show_level(stats)
     scoreboard.show_score(stats)
+    scoreboard.show_high_score(stats)
 
 
 def draw_countdown(foods):
@@ -59,7 +61,7 @@ def update_snake(screen, stats, snake_head, snake_parts):
 
 def update_food(settings, stats, screen, snake_head, snake_parts, foods):
     # 生成食物
-    while len(foods) < settings.food_limit:
+    while len(foods) < settings.food_limit and not check_bonus_food(foods):
         food = Food(screen, settings)
         food.random_pos(snake_head, snake_parts, foods)
 
@@ -127,7 +129,7 @@ def check_key_down(event, stats, snake_head, snake_parts, foods):
 def check_collision(settings, stats, snake_head, snake_parts, foods):
     # 检测头部撞到身体
     if pygame.sprite.spritecollideany(snake_head, snake_parts):
-        time.sleep(2)
+        time.sleep(1)
         stats.game_active = False
 
     # 检测吃到食物
@@ -148,6 +150,13 @@ def check_bonus(settings, food, foods):
             if food.style != food_style1:
                 return False
         return True
+
+
+def check_bonus_food(foods):
+    for food in foods:
+        if food.style == 'bonus':
+            return True
+    return False
 
 
 def check_big_food(foods):
@@ -172,10 +181,12 @@ def bonus(settings, screen, stats, snake_head, snake_parts, foods):
     # 加分
     stats.score += settings.bonus_points * stats.level
 
-    # 增加食物
+    # 清空食物，并增加bonus样式的食物
+    foods.empty()
     while len(foods) < settings.bonus_food:
         food = Food(screen, settings)
         food.random_pos(snake_head, snake_parts, foods)
+        food.bonus_mode()
         foods.add(food)
 
     # 将蛇长度缩短
